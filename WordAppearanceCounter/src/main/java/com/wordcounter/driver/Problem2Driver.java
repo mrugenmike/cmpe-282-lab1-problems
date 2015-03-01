@@ -1,0 +1,61 @@
+package com.wordcounter.driver;
+
+import com.wordcounter.mapper.Stage1WordAppearanceMapper;
+import com.wordcounter.mapper.WordAppearanceCounterMapper;
+import com.wordcounter.reducer.Stage1WordAppearanceCounterReducer;
+import com.wordcounter.reducer.WordAppearanceTotalReducer;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+
+public class Problem2Driver extends Configured implements Tool {
+    public static void main(String... args) throws Exception {
+
+        ToolRunner.run(new Configuration(),new Problem2Driver(),args);
+    }
+
+    @Override
+    public int run(String[] args) throws Exception {
+        Configuration conf = getConf();
+        conf.set("word1",args[0]);
+        conf.set("word2",args[1]);
+        FileSystem fs = FileSystem.get(conf);
+
+        Job job = Job.getInstance(conf,"MapReduce 1");
+        job.setJarByClass(Problem2Driver.class);
+        job.setMapperClass(Stage1WordAppearanceMapper.class);
+        job.setReducerClass(Stage1WordAppearanceCounterReducer.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
+        job.setInputFormatClass(TextInputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
+
+        org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job, new Path("/input/Holmes.txt"));
+        org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job, new Path(args[2]));
+
+        job.waitForCompletion(true);
+        System.out.println("JOB 1 COMPLETE");
+
+        Job job2 = Job.getInstance(conf, "MapReduce 2");
+        job2.setJarByClass(Problem2Driver.class);
+        job2.setMapperClass(WordAppearanceCounterMapper.class);
+        job2.setReducerClass(WordAppearanceTotalReducer.class);
+        job2.setOutputKeyClass(Text.class);
+        job2.setOutputValueClass(Text.class);
+        job2.setInputFormatClass(TextInputFormat.class);
+        job2.setOutputFormatClass(TextOutputFormat.class);
+        org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job2, new Path(args[2]));
+        org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job2, new Path(args[3]));
+
+        job2.waitForCompletion(true);
+        return 0;
+    }
+}
