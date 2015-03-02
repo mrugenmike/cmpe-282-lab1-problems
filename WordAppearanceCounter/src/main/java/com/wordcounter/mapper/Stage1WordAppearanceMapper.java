@@ -5,48 +5,30 @@ import org.apache.hadoop.mapreduce.*;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Stage1WordAppearanceMapper extends Mapper<LongWritable,Text,Text,Text> {
-    final StopWords stopWordService = new StopWords();
+public class Stage1WordAppearanceMapper extends Mapper<LongWritable,Text,Text,IntWritable> {
 
     @Override
     protected void map(LongWritable offset,Text line,Context context) throws IOException, InterruptedException {
         // Compile all the words using regex
         Pattern p = Pattern.compile("\\w+");
-        String cleanLine = line.toString().trim().toLowerCase().replaceAll("[^A-Za-z ]", "");
-
+        String cleanLine = line.toString().trim().toLowerCase().replaceAll("[^A-Za-z ]+", "");
         Matcher m = p.matcher(cleanLine);
-        String word1 = context.getConfiguration().get("word1").toLowerCase().trim();
-        String word2 = context.getConfiguration().get("word2").toLowerCase().trim();
 
-        // Get the name of the file from the inputsplit in the context
-        String fileName = ((FileSplit) context.getInputSplit()).getPath().getName();
+        String wordOfInterest = context.getConfiguration().get("word1").toLowerCase().trim();
+        String wordOfInterest2 = context.getConfiguration().get("word2").toLowerCase().trim();
 
-        // build the values and write <k,v> pairs through the context
-        StringBuilder valueBuilder = new StringBuilder();
-        while (m.find()) {
-            String word = m.group().toLowerCase().trim();
-            // using stopword service instead of Stemmer algorithm
-            if(!stopWordService.isStopWord(word)){
-                // remove special characters and digits
-                if (!Character.isLetter(word.charAt(0))
-                        || Character.isDigit(word.charAt(0))) {
-                    continue;
-                }
+        String regex = String.format("%s.*%s|%s.*%s", wordOfInterest, wordOfInterest2, wordOfInterest2, wordOfInterest);
+        Pattern pattern1 = Pattern.compile(regex);
 
-                // emit the partial <k,v>
-                if(word.equals(word1)||word.equals(word2)){
-                    valueBuilder.append(fileName);
-                    valueBuilder.append("@");
-                    valueBuilder.append(offset.get());
-                    context.write(new Text(valueBuilder.toString()),new Text(word));
-                    valueBuilder.setLength(0);
-                }
+        Matcher matcher1 = pattern1.matcher(cleanLine);
 
-            }
+        if(matcher1.find() ){
+            context.write(new Text(wordOfInterest + " " + wordOfInterest2), new IntWritable(1));
         }
     }
 

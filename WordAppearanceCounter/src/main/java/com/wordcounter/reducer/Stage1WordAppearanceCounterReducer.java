@@ -1,5 +1,7 @@
 package com.wordcounter.reducer;
 
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -7,25 +9,18 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Stage1WordAppearanceCounterReducer extends Reducer<Text,Text,Text, Text> {
+public class Stage1WordAppearanceCounterReducer extends Reducer<Text,IntWritable,Text, IntWritable> {
     @Override
-    protected void reduce(Text lineWithOffset, Iterable<Text> wordsOnTheLine, Context context)
+    protected void reduce(Text wordsFound, Iterable<IntWritable> wordsOnTheLine, Context context)
             throws IOException, InterruptedException {
-        String word1 = context.getConfiguration().get("word1").toLowerCase().trim();
-        String word2 = context.getConfiguration().get("word2").toLowerCase().trim();
-
-
-        Set<String> wordsOfInterest = new HashSet<String>();
-
-        for (Text word : wordsOnTheLine) {
-            if (word.toString().equals(word1) || word.toString().equals(word2)) {
-                wordsOfInterest.add(word.toString());
-            }
+        String wordOfInterest1 = context.getConfiguration().get("word1").toLowerCase().trim();
+        String wordOfInterest2 = context.getConfiguration().get("word2").toLowerCase().trim();
+        int totalCount = 0 ;
+        for(IntWritable wordCount: wordsOnTheLine){
+            totalCount+=wordCount.get();
         }
+        context.write(new Text(String.format("%s and %s  appears on same line for following times: ",wordOfInterest1,wordOfInterest2)),new IntWritable(totalCount));
 
-        if (wordsOfInterest.contains(word1) && wordsOfInterest.contains(word2)) {
-            context.write(new Text(lineWithOffset), new Text(word1 + "," + word2));
-        }
     }
 }
 
