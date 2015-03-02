@@ -1,12 +1,9 @@
 package com.wordcounter.driver;
 
 import com.wordcounter.mapper.Stage1WordAppearanceMapper;
-import com.wordcounter.mapper.WordAppearanceCounterMapper;
 import com.wordcounter.reducer.Stage1WordAppearanceCounterReducer;
-import com.wordcounter.reducer.WordAppearanceTotalReducer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
