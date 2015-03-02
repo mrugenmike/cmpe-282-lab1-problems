@@ -32,7 +32,6 @@ public class Problem2Driver extends Configured implements Tool {
         }
         conf.set("word1",args[0]);
         conf.set("word2",args[1]);
-        FileSystem fs = FileSystem.get(conf);
 
         Job job = Job.getInstance(conf,"MapReduce 1");
         job.setJarByClass(Problem2Driver.class);
@@ -49,20 +48,6 @@ public class Problem2Driver extends Configured implements Tool {
         org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job, new Path(args[3]));
 
         job.waitForCompletion(true);
-      /*  System.out.println("JOB 1 COMPLETE");
-
-        Job job2 = Job.getInstance(conf, "MapReduce 2");
-        job2.setJarByClass(Problem2Driver.class);
-        job2.setMapperClass(WordAppearanceCounterMapper.class);
-        job2.setReducerClass(WordAppearanceTotalReducer.class);
-        job2.setOutputKeyClass(Text.class);
-        job2.setOutputValueClass(Text.class);
-        job2.setInputFormatClass(TextInputFormat.class);
-        job2.setOutputFormatClass(TextOutputFormat.class);
-        org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath(job2, new Path(args[2]));
-        org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath(job2, new Path(args[3]));
-
-        job2.waitForCompletion(true);*/
         return 0;
     }
 }
