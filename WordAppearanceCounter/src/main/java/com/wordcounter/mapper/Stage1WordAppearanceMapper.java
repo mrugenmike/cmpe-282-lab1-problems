@@ -14,10 +14,7 @@ public class Stage1WordAppearanceMapper extends Mapper<LongWritable,Text,Text,In
 
     @Override
     protected void map(LongWritable offset,Text line,Context context) throws IOException, InterruptedException {
-        // Compile all the words using regex
-        Pattern p = Pattern.compile("\\w+");
         String cleanLine = line.toString().trim().toLowerCase().replaceAll("[^A-Za-z ]+", "");
-        Matcher m = p.matcher(cleanLine);
 
         String wordOfInterest = context.getConfiguration().get("word1").toLowerCase().trim();
         String wordOfInterest2 = context.getConfiguration().get("word2").toLowerCase().trim();
