@@ -1,0 +1,3 @@
+com/wordcounter/driver/Problem2Driver.class
+com/wordcounter/mapper/Stage1WordAppearanceMapper.class
+com/wordcounter/reducer/Stage1WordAppearanceCounterReducer.class
