@@ -23,7 +23,7 @@ public class Problem2Driver extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         Configuration conf = getConf();
-        if(args[0]==null||args[1]==null ){
+        if(args==null||args.length!=4){
            System.out.println("Please Specify following program arguments: \n <word1> <word2> <inputDirectoryInHDFS> <outputDirectoryInHDFS>");
             System.exit(0);
         }
