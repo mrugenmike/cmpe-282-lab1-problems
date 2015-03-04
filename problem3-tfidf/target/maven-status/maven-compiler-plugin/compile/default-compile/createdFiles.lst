@@ -2,7 +2,10 @@ com/tfidf/stage2/WordCountsForDocsMapper.class
 com/tfidf/stage3/WordsInAllDocsTFIDReducer.class
 com/tfidf/stage1/StopWords.class
 com/tfidf/stage1/WordFrequenceInDocMapper.class
+com/tfidf/TFIDFDriver.class
 com/tfidf/stage3/WordsInAllDocsTFIDFMapper.class
-TFIDFDriver.class
+com/tfidf/util/FileSplitter.class
+com/tfidf/util/LocalToHDFSCopier$1.class
+com/tfidf/util/LocalToHDFSCopier.class
 com/tfidf/stage1/WordFrequenceInDocReducer.class
 com/tfidf/stage2/WordCountsForDocsReducer.class

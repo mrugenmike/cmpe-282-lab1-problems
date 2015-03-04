@@ -15,8 +15,8 @@ public class WordsInAllDocsTFIDFMapper extends Mapper<LongWritable, Text, Text, 
     private Text wordAndCounters = new Text();
 
     /**
-     *     PRE-CONDITION: marcello@book.txt    3/1500
-     *     POST-CONDITION: marcello, book.txt=3/1500,1
+     *     INPUT: marcello@book.txt    3/1500
+     *     OUTPUT: marcello, book.txt=3/1500,1
      */
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String[] wordAndCounters = value.toString().split("\t");

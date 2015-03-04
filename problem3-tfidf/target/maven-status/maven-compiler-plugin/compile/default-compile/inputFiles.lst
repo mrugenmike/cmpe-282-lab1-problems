@@ -1,8 +1,10 @@
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage2/WordCountsForDocsReducer.java
+/Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/util/LocalToHDFSCopier.java
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage1/WordFrequenceInDocReducer.java
-/Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/TFIDFDriver.java
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage1/StopWords.java
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage2/WordCountsForDocsMapper.java
+/Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/TFIDFDriver.java
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage1/WordFrequenceInDocMapper.java
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage3/WordsInAllDocsTFIDFMapper.java
+/Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/util/FileSplitter.java
 /Users/mrugen/gitrepos/cmpe-282-lab1-problems/problem3-tfidf/src/main/java/com/tfidf/stage3/WordsInAllDocsTFIDReducer.java

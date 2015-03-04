@@ -25,43 +25,48 @@ private Text tfidfCounts = new Text();
  */
 protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
         InterruptedException {
-
+    // Words of Interest
+    String word1 = context.getConfiguration().get("word1").toLowerCase().trim();
+    String word2 = context.getConfiguration().get("word2").toLowerCase().trim();
+    System.out.println("Stage 3 Reducer: "+key);
         // get the number of documents indirectly from the file-system
         int numberOfDocumentsInCorpus = context.getConfiguration().getInt("numberOfDocsInCorpus", 0);
         // total frequency of this word
         int numberOfDocumentsInCorpusWhereKeyAppears = 0;
         Map<String, String> tempFrequencies = new HashMap<String, String>();
         for (Text val : values) {
-        String[] documentAndFrequencies = val.toString().split("=");
-        // in case the counter of the words is > 0
-        if (Integer.parseInt(documentAndFrequencies[1].split("/")[0]) > 0) {
-        numberOfDocumentsInCorpusWhereKeyAppears++;
-        }
-        tempFrequencies.put(documentAndFrequencies[0], documentAndFrequencies[1]);
+            String[] documentAndFrequencies = val.toString().split("=");
+            // in case the counter of the words is > 0
+            if (Integer.parseInt(documentAndFrequencies[1].split("/")[0]) > 0) {
+                numberOfDocumentsInCorpusWhereKeyAppears++;
+            }
+            tempFrequencies.put(documentAndFrequencies[0], documentAndFrequencies[1]);
         }
         for (String document : tempFrequencies.keySet()) {
-        String[] wordFrequenceAndTotalWords = tempFrequencies.get(document).split("/");
+            String[] wordFrequenceAndTotalWords = tempFrequencies.get(document).split("/");
 
-        // Term frequency is the quotient of the number occurrences of the term in document and the total
-        // number of terms in document
-        double tf = Double.valueOf(Double.valueOf(wordFrequenceAndTotalWords[0])
-        / Double.valueOf(wordFrequenceAndTotalWords[1]));
+            // Term frequency is the quotient of the number occurrences of the term in document and the total
+            // number of terms in document
+            double tf = Double.valueOf(Double.valueOf(wordFrequenceAndTotalWords[0])
+                    / Double.valueOf(wordFrequenceAndTotalWords[1]));
 
-        // inverse document frequency quotient between the number of docs in corpus and number of docs the
-        // term appears Normalize the value in case the number of appearances is 0.
-        double idf = Math.log10((double) numberOfDocumentsInCorpus /
-        (double) ((numberOfDocumentsInCorpusWhereKeyAppears == 0 ? 1 : 0) +
-        numberOfDocumentsInCorpusWhereKeyAppears));
+            // inverse document frequency quotient between the number of docs in corpus and number of docs the
+            // term appears Normalize the value in case the number of appearances is 0.
+            double idf = Math.log10((double) numberOfDocumentsInCorpus /
+                    (double) ((numberOfDocumentsInCorpusWhereKeyAppears == 0 ? 1 : 0) +
+                            numberOfDocumentsInCorpusWhereKeyAppears));
 
-        double tfIdf = tf * idf;
+            double tfIdf = tf * idf;
 
-        this.wordAtDocument.set(key + "@" + document);
-        this.tfidfCounts.set("[" + numberOfDocumentsInCorpusWhereKeyAppears + "/"
-        + numberOfDocumentsInCorpus + " , " + wordFrequenceAndTotalWords[0] + "/"
-        + wordFrequenceAndTotalWords[1] + " , " + DF.format(tfIdf) + "]");
+            this.wordAtDocument.set(key + "@" + document);
+            this.tfidfCounts.set("[" + numberOfDocumentsInCorpusWhereKeyAppears + "/"
+                    + numberOfDocumentsInCorpus + " , " + wordFrequenceAndTotalWords[0] + "/"
+                    + wordFrequenceAndTotalWords[1] + " , " + DF.format(tfIdf) + "]");
 
-        context.write(this.wordAtDocument, this.tfidfCounts);
+            String[] split = this.wordAtDocument.toString().split("@");
+            if(key.toString().toLowerCase().equals(word1)||key.toString().toLowerCase().equals(word2))
+            context.write(this.wordAtDocument, this.tfidfCounts);
         }
-        }
+}
         }
 

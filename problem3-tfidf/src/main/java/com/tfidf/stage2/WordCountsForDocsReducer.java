@@ -16,11 +16,8 @@ private Text wordAtDoc = new Text();
 private Text wordAvar = new Text();
 
 /**
- * @param key is the key of the mapper
- * @param values are all the values aggregated during the mapping phase
- * @param context contains the context of the job run
  *
- *        PRE-CONDITION: receive a list of <document, ["word=n", "word-b=x"]>
+ *        Input: receive a list of <document, ["word=n", "word-b=x"]>
  *            pairs <"a.txt", ["word1=3", "word2=5", "word3=5"]>
  *
  *       POST-CONDITION: <"word1@a.txt, 3/13">,

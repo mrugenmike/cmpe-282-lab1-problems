@@ -12,11 +12,8 @@ public class WordCountsForDocsMapper extends Mapper<LongWritable, Text, Text, Te
     private Text wordAndCount = new Text();
 
     /**
-     * @param key is the byte offset of the current line in the file;
-     * @param value is the line from the file
-     * @param context
      *
-     *     PRE-CONDITION: aa@leornardo-davinci-all.txt    1
+     *     Input: aa@leornardo-davinci-all.txt    1
      *                    aaron@all-shakespeare   98
      *                    ab@leornardo-davinci-all.txt    3
      *
